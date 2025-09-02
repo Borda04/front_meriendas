@@ -1,0 +1,22 @@
+# Entorno virtual de Python
+venv/
+
+# Archivos de caché de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Metadatos de Git
+.git/
+.gitignore
+
+# Archivos del IDE
+.idea/
+
+# Archivos temporales y artefactos
+storage/temp/
+front_caidas.tar
+
+# Documentación que no es necesaria en la imagen
+README.md

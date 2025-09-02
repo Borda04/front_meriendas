@@ -1,0 +1,20 @@
+# Virtual Environment
+venv/
+.venv/
+env/
+
+# IDE configuration
+.idea/
+.vscode/
+
+# Python cache and compiled files
+__pycache__/
+*.pyc
+
+# Build artifacts
+build/
+dist/
+*.egg-info
+
+# Large files
+caidas-web.tar

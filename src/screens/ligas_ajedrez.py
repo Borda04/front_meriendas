@@ -7,7 +7,8 @@ def mostrar_ligas_activas(page):
 
     def cargar_ligas():
         try:
-            response = requests.get("http://10.5.2.53:8103/consulta/ligas")
+            response = requests.get("http://10.5.2.53:8551/consulta/ligas")
+            #response = requests.get("http://localhost:8000/consulta/ligas")
             data = response.json()
 
             if data.get("status") != "ok":
@@ -47,7 +48,7 @@ def mostrar_ligas_activas(page):
                     )
 
             ligas_container.controls.append(
-                ft.ElevatedButton("Volver al Inicio", on_click=lambda e: page.go("/"))
+                ft.ElevatedButton("Volver al Inicio", on_click=lambda e: page.go("/app"))
             )
             page.update()
 
@@ -55,13 +56,6 @@ def mostrar_ligas_activas(page):
             ligas_container.controls.append(ft.Text(f"Error de conexión: {e}", color=ft.Colors.RED))
             page.update()
 
-    page.views.append(
-        ft.View(
-            "/ligas",
-            controls=[ligas_container],
-            scroll=ft.ScrollMode.AUTO,
-            bgcolor=ft.Colors.BLUE_GREY_900,
-        )
-    )
-
     cargar_ligas()
+
+    return ligas_container

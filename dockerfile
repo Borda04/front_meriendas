@@ -1,25 +1,33 @@
-# Usa una imagen base de Python
-FROM python:3.11-slim
+# Etapa 1: Build - Instalar dependencias
+FROM python:3.11-slim AS builder
 
-# Instala dependencias del sistema necesarias para compilar paquetes si los hay
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
+# Instalar dependencias del sistema para compilar
+RUN apt-get update && apt-get install -y build-essential && rm -rf /var/lib/apt/lists/*
 
-# Establece el directorio de trabajo
+# Crear un directorio para las dependencias de Python
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Copiar e instalar requerimientos
 WORKDIR /app
-
-# Copia primero solo requirements.txt (mejor cacheo en builds)
 COPY requirements.txt .
-
-# Instala dependencias Python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Luego copiamos el resto del proyecto
+# Etapa 2: Final - La imagen de producción
+FROM python:3.11-slim
+
+# Establecer el directorio de trabajo
+WORKDIR /app
+
+# Copiar el entorno virtual con las dependencias desde la etapa 'builder'
+COPY --from=builder /opt/venv /opt/venv
+
+# Copiar el código de la aplicación
 COPY . .
 
-# Expone el puerto por defecto de Flet
-EXPOSE 8550
+# Activar el entorno virtual para los comandos siguientes
+ENV PATH="/opt/venv/bin:$PATH"
 
-# Comando para ejecutar la app
+# Exponer el puerto y ejecutar la aplicación
+EXPOSE 8550
 CMD ["python", "main.py"]

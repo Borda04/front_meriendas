@@ -11,7 +11,8 @@ def mostrar_pantalla_fechas(page):
 
     def cargar_datos():
         try:
-            response = requests.get("http://10.5.2.53:8103/consulta/fechas")
+            response = requests.get("http://10.5.2.53:8551/consulta/fechas")
+            #response = requests.get("http://localhost:8000/consulta/fechas")
             json_data = response.json()
 
             if json_data.get("status") != "ok":
@@ -80,7 +81,7 @@ def mostrar_pantalla_fechas(page):
                 ft.Row([tabla], alignment=ft.MainAxisAlignment.CENTER)
             )
             tabla_container.controls.append(
-                ft.ElevatedButton("🔙 Volver al Inicio", on_click=lambda e: page.go("/"))
+                ft.ElevatedButton("🔙 Volver al Inicio", on_click=lambda e: page.go("/app"))
             )
             page.update()
 
@@ -93,12 +94,4 @@ def mostrar_pantalla_fechas(page):
 
     cargar_datos()
 
-    page.views.append(
-        ft.View(
-            "/fechas",
-            controls=[tabla_container],
-            scroll=ft.ScrollMode.AUTO,
-            bgcolor=ft.Colors.BLUE_GREY_900,
-            padding=20,
-        )
-    )
+    return tabla_container

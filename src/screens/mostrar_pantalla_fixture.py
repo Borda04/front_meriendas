@@ -12,7 +12,8 @@ def mostrar_pantalla_fixture_mejorado(page):
         nonlocal partidas_totales
 
         try:
-            response = requests.get("http://10.5.2.53:8103/consulta/fixture_rondas")
+            response = requests.get("http://10.5.2.53:8551/consulta/fixture_rondas")
+            #response = requests.get("http://localhost:8000/consulta/fixture_rondas")
             json_data = response.json()
 
             if json_data.get("status") != "ok":
@@ -98,26 +99,22 @@ def mostrar_pantalla_fixture_mejorado(page):
             ft.ElevatedButton(
                 "Volver al Inicio",
                 icon=ft.Icons.ARROW_BACK,
-                on_click=lambda e: page.go("/")
+                on_click=lambda e: page.go("/app")
             )
         )
         page.update()
 
-    page.views.append(
-        ft.View(
-            "/fixture",
-            controls=[
-                ft.Container(
-                    padding=10,
-                    content=ft.ResponsiveRow([
-                        ft.Container(dropdown_ronda, col=6),
-                        ft.Container(dropdown_jugador, col=6),
-                    ])
-                ),
-                fixture_container
-            ],
-            scroll=ft.ScrollMode.AUTO,
-            bgcolor=ft.Colors.BLUE_GREY_900,
-        )
-    )
     cargar_fixture()
+
+    return ft.Column(
+        [
+            ft.Container(
+                padding=10,
+                content=ft.ResponsiveRow([
+                    ft.Container(dropdown_ronda, col=6),
+                    ft.Container(dropdown_jugador, col=6),
+                ])
+            ),
+            fixture_container
+        ]
+    )

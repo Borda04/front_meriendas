@@ -11,7 +11,8 @@ def mostrar_integrantes(page):
     def cargar_integrantes():
         nonlocal integrantes
         try:
-            response = requests.get("http://10.5.2.53:8103/consulta/jugadores")
+            response = requests.get("http://10.5.2.53:8551/consulta/jugadores")
+            #response = requests.get("localhost:8000/consulta/jugadores")
             data = response.json()
 
             if data.get("status") != "ok":
@@ -62,20 +63,15 @@ def mostrar_integrantes(page):
                 )
 
         integrantes_container.controls.append(
-            ft.ElevatedButton("Volver al Inicio", on_click=lambda e: page.go("/"))
+            ft.ElevatedButton("Volver al Inicio", on_click=lambda e: page.go("/app"))
         )
         page.update()
 
-    page.views.append(
-        ft.View(
-            "/integrantes",
-            controls=[
-                ft.Row([dropdown_integrante], alignment=ft.MainAxisAlignment.START),
-                integrantes_container
-            ],
-            scroll=ft.ScrollMode.AUTO,
-            bgcolor=ft.Colors.BLUE_GREY_900,
-        )
-    )
-
     cargar_integrantes()
+
+    return ft.Column(
+        [
+            ft.Row([dropdown_integrante], alignment=ft.MainAxisAlignment.START),
+            integrantes_container
+        ]
+    )

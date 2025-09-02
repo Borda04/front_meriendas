@@ -2,7 +2,8 @@ import flet as ft
 import requests
 
 def obtener_empleados():
-    response = requests.get("http://10.5.2.53:8103/consulta/integrantes")
+    response = requests.get("http://10.5.2.53:8551/consulta/integrantes")
+    #response = requests.get("http://localhost:8000/consulta/integrantes")
     json_data = response.json()
     datos = json_data.get("data", [])
     return [
@@ -10,7 +11,8 @@ def obtener_empleados():
     ]
 
 def obtener_id_caidas():
-    response = requests.get("http://10.5.2.53:8103/consulta/fechas")
+    response = requests.get("http://10.5.2.53:8551/consulta/fechas")
+    #response = requests.get("http://localhost:8000/consulta/fechas")
     json_data = response.json()
     datos_caida = json_data.get("data", [])
     return [
@@ -25,7 +27,8 @@ def guardar_votos(id_caida, id_integrante, valor_voto, page):
     }
 
     try:
-        response = requests.post("http://10.5.2.53:8103/votacion/votar", json=payload)
+        response = requests.post("http://10.5.2.53:8551/votacion/votar", json=payload)
+        #response = requests.post("http://localhost:8000/votacion/votar", json=payload)
         json_data = response.json()
         msg = json_data.get("message", "Voto registrado correctamente")
         page.snack_bar = ft.SnackBar(ft.Text(msg), bgcolor=ft.Colors.GREEN_400)
@@ -79,18 +82,12 @@ def mostrar_pantalla_votacion(page):
         )
     )
 
-    volver_btn = ft.ElevatedButton("← Volver", icon=ft.Icons.ARROW_BACK, on_click=lambda e: page.go("/"))
+    volver_btn = ft.ElevatedButton("← Volver", icon=ft.Icons.ARROW_BACK, on_click=lambda e: page.go("/app"))
 
-    page.views.clear()
-    page.views.append(
-        ft.View(
-            route="/voto",
-            controls=[
-                ft.Container(content=card, alignment=ft.alignment.center),
-                volver_btn
-            ],
-            bgcolor=ft.Colors.BLUE_GREY_900,
-            vertical_alignment=ft.MainAxisAlignment.CENTER,
-            horizontal_alignment=ft.CrossAxisAlignment.CENTER
-        )
+    return ft.Column(
+        [
+            ft.Container(content=card, alignment=ft.alignment.center),
+            volver_btn
+        ],
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER
     )
